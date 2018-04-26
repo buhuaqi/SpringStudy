@@ -1,0 +1,12 @@
+
+需求：创建一个实现计算机基本功能的接口和一个实现类
+-日志：在程序执行期间追踪正在发生的活动
+
+以以下为例，如果我们需要加减乘除都需要日志打印，会在每个方法中都加入日志输出语句
+造成代码冗余，混乱，核心代码分散
+public int add(int i, int j) {
+		System.out.println("The method add begins with"+new Date(System.currentTimeMillis()));
+		int result = i+j;
+		System.out.println("The method add over with"+new Date(System.currentTimeMillis()));
+		return result;
+	}
