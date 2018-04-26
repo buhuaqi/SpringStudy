@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<bean id ="helloWorld" class="com.spring.HelloWorld">
+	<!-- “name”的名字对应setName value的值对应setName方法中的name值 -->
+		<property name="name" value="Spring"></property>
+	</bean>
+	<!-- 通过构造方法设置bean的属性 -->
+	<bean id="car" class="com.spring.Car">
+		<constructor-arg value="Audi" index="0"></constructor-arg>
+		<constructor-arg value="Shanghai" index="1"></constructor-arg>
+		<constructor-arg value="30000" type="double"></constructor-arg>
+	</bean>
+	
+	<!-- 使用构造器注入属性值可以指定参数的位置和参数的类型，来区分重载构造器 -->
+	<bean id="car2" class="com.spring.Car">
+		<constructor-arg value="BMW" type="java.lang.String"></constructor-arg>
+		<constructor-arg value="Shanghai" type="java.lang.String"></constructor-arg>
+		<constructor-arg value="240" type="int"></constructor-arg>
+	</bean>
+	
+	<bean id="person" class="com.spring.Person">
+		<property name="name" value="buhuaqi"></property>
+		<property name="age" value="23"></property>
+		<!-- 用ref来指向目标bean（指向id为car的bean） -->
+		<property name="car" ref="car"></property>
+		<!-- 为级联属性赋值，上面调用了ref="car"，但是maxSpeed这个为空，可采用该方式为其注入参数 -->
+		<property name="car.maxSpeed" value="280"></property>
+	</bean>
+	
+	<!-- 配置list属性 -->
+	<bean id="person1" class="com.spring.list.Person">
+		<property name="name" value="buhuaqi"></property>
+		<property name="age" value="22"></property>
+		<property name="cars">
+			<list>
+				<ref bean="car" />
+				<ref bean="car2" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 配置map属性(map集合是键值对) -->
+	<bean id="newPerson" class="com.spring.list.MapPerson">
+		<property name="name" value="BHQ"></property>
+		<property name="age" value="22"></property>
+		<property name="cars">
+			<map>
+				<entry key="AA" value-ref="car"></entry>
+				<entry key="BB" value-ref="car2"></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 配置独立的集合bean，以供多个bean使用集合，这里这个集合有car与car2两个bean -->
+	<util:list id="cars">
+		<ref bean="car"/>
+		<ref bean="car2"/>
+	</util:list>
+	
+	<bean id="person2" class="com.spring.list.Person">
+		<property name="name" value="buhuaqi"></property>
+		<property name="age" value="23"></property>
+		<property name="cars" ref="cars"></property>
+	</bean>
+	
+	<!-- 用p：标签进行属性赋值 -->
+	<bean id="person3" class="com.spring.list.Person" p:name="buhuaqi" p:age="22" p:cars-ref="cars"></bean>
+</beans>
